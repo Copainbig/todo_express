@@ -8,10 +8,19 @@ let todos = [];
     Set the CORS headers
  */
 app.use(function(req, res, next) {
-    res.header('Access-Control-Allow-Headers', 'Content-Type');
-    res.header('Access-Control-Allow-Methods', 'GET,POST,PATCH,DELETE');
+    res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, Content-Length, X-Requested-With');
+    res.header('Access-Control-Allow-Methods', 'GET,POST,PATCH,DELETE,OPTIONS');
     res.header('Access-Control-Allow-Origin', '*');
-    next();
+
+    //intercepts OPTIONS method
+    if ('OPTIONS' === req.method) {
+        //respond with 200
+        res.send(200);
+    }
+    else {
+        //move on
+        next();
+    }
 });
 
 app.get('/todos', function(req, res){
