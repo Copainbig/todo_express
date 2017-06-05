@@ -1,6 +1,8 @@
 const express = require('express');
+const parser = require('body-parser');
 
 const app = express();
+app.use(parser.json());
 
 let todos = [];
 
@@ -15,7 +17,7 @@ app.use(function(req, res, next) {
     //intercepts OPTIONS method
     if ('OPTIONS' === req.method) {
         //respond with 200
-        res.send(200);
+        res.sendStatus(200);
     }
     else {
         //move on
@@ -25,13 +27,13 @@ app.use(function(req, res, next) {
 
 app.get('/todos', function(req, res){
     console.log('got a GET request');
-    res.end(JSON.stringify(todos));
+    res.send(todos);
 });
 
 app.post('/todos', function(req, res){
     console.log('got a POST request');
-    todos.push(JSON.parse(req.body));
-    res.end(req.body);
+    let index = todos.push(req.body) - 1;
+    res.send(todos[index]);
 });
 
 app.listen(3000);
